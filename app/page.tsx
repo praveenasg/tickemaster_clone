@@ -1,3 +1,9 @@
+import EventList from "@/components/EventList";
+
 export default function Home() {
-  return <div className="">welcome to ticker master client</div>;
+  return (
+    <div className="">
+      <EventList />
+    </div>
+  );
 }
