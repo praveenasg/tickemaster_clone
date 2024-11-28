@@ -5,9 +5,10 @@ import { Id } from "@/convex/_generated/dataModel";
 import { useUser } from "@clerk/nextjs";
 import { useQuery } from "convex/react";
 import { Ticket } from "lucide-react";
-import { useRouter } from "next/router";
+
 import { useEffect, useState } from "react";
 import ReleaseTicket from "./ReleaseTicket";
+import { useRouter } from "next/navigation";
 
 function PurchaseTicket({ eventId }: { eventId: Id<"events"> }) {
   const router = useRouter();
@@ -39,7 +40,7 @@ function PurchaseTicket({ eventId }: { eventId: Id<"events"> }) {
           `${minutes} minute${minutes === 1 ? "" : "s"} and ${seconds} second${seconds === 1 ? "" : "s"}`
         );
       } else {
-        setTimeRemaining(` ${seconds} second${seconds === 1 ? "" : "s"}`);
+        setTimeRemaining(`${seconds} second${seconds === 1 ? "" : "s"}`);
       }
     };
 

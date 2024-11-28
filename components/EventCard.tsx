@@ -151,7 +151,7 @@ function EventCard({ eventId }: { eventId: Id<"events"> }) {
 
   return (
     <div
-      onClick={() => router.push(`event/${eventId}`)}
+      onClick={() => router.push(`/event/${eventId}`)}
       className={`bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 cursor-pointer overflow-hidden relative ${
         isPastEvent ? "opacity-75 hover:opacity-100" : ""
       }`}
@@ -170,14 +170,12 @@ function EventCard({ eventId }: { eventId: Id<"events"> }) {
         </div>
       )}
 
-      {/* Event information */}
       <div className={`p-6 ${imageUrl ? "relative" : ""}`}>
         <div className="flex justify-between items-start">
-          {/* event name and owner badge */}
           <div>
             <div className="flex flex-col items-start gap-2">
               {isEventOwner && (
-                <span className=" inline-flex items-center gap-1 bg-blue-600/90 text-white px-2 py-1 rounded-full text-xs font-medium">
+                <span className="inline-flex items-center gap-1 bg-blue-600/90 text-white px-2 py-1 rounded-full text-xs font-medium">
                   <StarIcon className="w-3 h-3" />
                   Your Event
                 </span>
@@ -190,26 +188,26 @@ function EventCard({ eventId }: { eventId: Id<"events"> }) {
               </span>
             )}
           </div>
+
+          {/* Price Tag */}
+          <div className="flex flex-col items-end gap-2 ml-4">
+            <span
+              className={`px-4 py-1.5 font-semibold rounded-full ${
+                isPastEvent
+                  ? "bg-gray-50 text-gray-500"
+                  : "bg-green-50 text-green-700"
+              }`}
+            >
+              £{event.price.toFixed(2)}
+            </span>
+            {availability.purchasedCount >= availability.totalTickets && (
+              <span className="px-4 py-1.5 bg-red-50 text-red-700 font-semibold rounded-full text-sm">
+                Sold Out
+              </span>
+            )}
+          </div>
         </div>
 
-        {/* price tag */}
-        <div className="flex flex-col items-end gap-2 ml-4">
-          <span
-            className={`px-4 py-1.5 font-semibold rounded-full ${
-              isPastEvent
-                ? "bg-gray-50 text-gray-500"
-                : "bg-green-50 text-green-700"
-            }`}
-          >
-            ${event.price.toFixed(2)}
-          </span>
-          {availability.purchasedCount >= availability.totalTickets && (
-            <span className="px-4 py-1.5 bg-red-50 text-red-700 font-semibold rounded-full text-sm">
-              Sold out
-            </span>
-          )}
-        </div>
-        {/* Event Details */}
         <div className="mt-4 space-y-3">
           <div className="flex items-center text-gray-600">
             <MapPin className="w-4 h-4 mr-2" />
@@ -217,7 +215,7 @@ function EventCard({ eventId }: { eventId: Id<"events"> }) {
           </div>
 
           <div className="flex items-center text-gray-600">
-            <CalendarDays className=" w-4 h-4 mr-2" />
+            <CalendarDays className="w-4 h-4 mr-2" />
             <span>
               {new Date(event.eventDate).toLocaleDateString()}{" "}
               {isPastEvent && "(Ended)"}
@@ -228,12 +226,12 @@ function EventCard({ eventId }: { eventId: Id<"events"> }) {
             <Ticket className="w-4 h-4 mr-2" />
             <span>
               {availability.totalTickets - availability.purchasedCount} /{" "}
-              {availability.totalTickets} Available
-              {isPastEvent && availability.activeOffers > 0 && (
+              {availability.totalTickets} available
+              {!isPastEvent && availability.activeOffers > 0 && (
                 <span className="text-amber-600 text-sm ml-2">
                   ({availability.activeOffers}{" "}
                   {availability.activeOffers === 1 ? "person" : "people"} trying
-                  to buy )
+                  to buy)
                 </span>
               )}
             </span>
