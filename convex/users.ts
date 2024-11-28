@@ -1,6 +1,40 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 
+export const updateOrCreateUserStripeConnectId = mutation({
+  args: {
+    stripeConnectId: v.string(),
+    userId: v.string(),
+  },
+  handler: async (ctx, { userId, stripeConnectId }) => {
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_user_id", (q) => q.eq("userId", userId))
+      .first();
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    await ctx.db.patch(user._id, { stripeConnectId: stripeConnectId });
+  },
+});
+
+export const getUsersStripeConnectId = query({
+  args: {
+    userId: v.string(),
+  },
+  handler: async (ctx, { userId }) => {
+    const user = await ctx.db
+      .query("users")
+      .filter((q) => q.eq(q.field("userId"), userId))
+      .filter((q) => q.eq(q.field("stripeConnectId"), undefined))
+      .first();
+
+    return user?.stripeConnectId;
+  },
+});
+
 export const getUserbyId = query({
   args: { userId: v.string() },
   handler: async (ctx, { userId }) => {
