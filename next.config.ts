@@ -8,6 +8,10 @@ const nextConfig: NextConfig = {
         hostname: "quaint-clownfish-778.convex.cloud",
         protocol: "https",
       },
+      {
+        hostname: "clear-warthog-340.convex.cloud",
+        protocol: "https",
+      },
     ],
   },
 };
