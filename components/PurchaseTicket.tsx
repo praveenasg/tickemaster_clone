@@ -9,6 +9,7 @@ import { Ticket } from "lucide-react";
 import { useEffect, useState } from "react";
 import ReleaseTicket from "./ReleaseTicket";
 import { useRouter } from "next/navigation";
+import { createStripeCheckoutSession } from "@/actions/createStripeCheckoutSession";
 
 function PurchaseTicket({ eventId }: { eventId: Id<"events"> }) {
   const router = useRouter();
@@ -48,8 +49,24 @@ function PurchaseTicket({ eventId }: { eventId: Id<"events"> }) {
     const interval = setInterval(calculateTimeReamining, 1000);
     return () => clearInterval(interval);
   }, [offerExpiresAt, isExpired]);
+  const handlePurchase = async () => {
+    if (!user) return;
 
-  const handlePurchase = async () => {};
+    try {
+      setIsLoading(true);
+      const { sessionUrl } = await createStripeCheckoutSession({
+        eventId,
+      });
+
+      if (sessionUrl) {
+        router.push(sessionUrl);
+      }
+    } catch (error) {
+      console.error("Error creating checkout session:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   if (!user || !queuePosition || queuePosition.status !== "offered") {
     return null;
